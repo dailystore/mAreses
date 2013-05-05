@@ -1,0 +1,61 @@
+<div data-role="page" data-theme="d" id="previewUserPage" class="ui-responsive-panel" data-title="Preview Feeds">
+    <div data-role="header" data-theme="b">
+        <h1>ARESES</h1>
+        <a href="#menu" data-icon="bars" data-iconpos="notext" data-shadow="false" data-iconshadow="false">Menu</a>
+		<div data-role="fieldcontain" id="userTool" class="ui-btn-right" style="margin-top:0.2em">
+			<select id="userMenu" data-native-menu="false" data-mini="true" data-inline="true" >
+				<option id="authentedUserEmail"></option>
+				<option value="userProfile">Tài khoản</option>
+				<option value="userLogOut">Đăng xuất</option>
+			</select>
+		</div>
+    </div><!-- /header -->
+    <div data-role="content" data-theme="d">
+	<div id="fillme">
+		<div id="list_preview_item">
+		</div>
+	</div>
+    </div><!-- /content -->
+	<div data-role="panel" id="menu" data-theme="c" data-display="overlay">
+        <ul data-role="listview">
+			<li><input type="search" name="search-mini" id="search-mini" value="" placeholder="Search here" data-mini="true" /></li>
+            <li data-role="list-divider">Menu</li>
+            <li><a href="#preview-dialog" data-rel="dialog">Xem trước</a></li>
+			<li data-icon="back"><a href="#get-feed" data-rel="dialog">Theo dõi</a></li>
+			<li data-icon="back"><a href="#user" data-rel="page">Các nguồn tin</a></li>
+			<li data-icon="back"><a href="#list-feed" data-rel="page">Các tin mới nhất</a></li>
+			<li data-icon="back"><a href="#tag-list-feed" data-rel="page">Các tin đã lưu</a></li>
+        </ul>
+		<div data-role="collapsible" id="userCol" data-inset="false" data-iconpos="right" data-theme="b" data-content-theme="d">
+				<h3>Areses@gov.vn</h3>
+				<ul data-role="listview" style="margin-top:0px;">
+					<li><a href="#">Tài khoản</a></li>
+					<li><a href="#">Đăng xuất</a></li>
+				</ul>
+			</div>
+    </div><!-- /panel menu-->
+	<div data-role="panel" data-position="right" data-position-fixed="false" data-display="overlay" id="user-profile" data-theme="b">
+	<h3 id="myModalLabel">Thông tin người dùng</h3>
+	<label class="control-label" for="inputEmail">Email:</label>
+	<input type="text" value="" id="inputEmail" placeholder="">
+	<label class="control-label" for="inputPassword">Mật khẩu mới:</label>
+	<input type="password" id="inputPassword" placeholder="***mật khẩu***">
+	<label class="control-label" for="inputRealname">Họ và tên:</label>
+	<input type="text" id="inputRealname" value="" placeholder="">
+	
+	<input type="hidden" id="genderUntouch" value="male"/>
+	<label class="control-label">Giới tính:</label>
+    <select name="gender" id="genderSelect" data-role="slider">
+        <option value="male">Nam</option>
+        <option value="female">Nữ</option>
+    </select>
+	<button id="submitProfileBtn" class="btn btn-danger" data-loading-text="Đang cập nhật..." autocomplete="off">Cập nhật</button>
+		<button id="cancelBtn" class="btn btn-primary">Phục hồi</button>
+		<a href="#user" data-role="button" data-rel="back" data-inline="true" data-mini="true" style="float:right; height:20px; margin-top:0px; font-weight:normal; text-decoration:none;">Đóng</a>
+		<div id="profileResult"></div>
+		<script src="js/user_authen.js"></script>
+</div><!-- /panel-user-profile -->
+	<div data-role="footer" data-theme="b">
+		<h1>Copyright. All rights reserved</h1>
+	</div><!-- /footer -->
+</div>
