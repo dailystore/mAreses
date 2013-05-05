@@ -1,0 +1,330 @@
+Ghi chú: 
+	+ Tất cả mọi link Web Service API đều yêu cầu phải hoàn tất authen trước khi sử dụng.
+	+ Khi request phải gửi kèm theo cookie jawnSUID với nội dung là chuỗi token để kiểm tra authorise.
+	+ Tất cả Response được trả về có format của JSON và với cấu trúc chung như sau:
+		{
+			meta://Chứa trạng thái request có thành công hay không.
+			{
+				success: true || false || null, //Nếu là true thì request được server thực hiện thành công, ngược lại sẽ không tồn tại hoặc nếu có sẽ mang giá trụ fasle hay null.
+				error: //Nếu có lỗi phát sinh thì thuộc tính này sẽ tồn tại và có nội dung như sau:
+				{
+					name:"" //Tên lỗi hay mã lỗi
+					message:"" //Nội dung chi tiết lỗi
+				}
+			},
+			data: {} //Tùy vào request có thành công và có trả về dữ liệu hay không mà thuộc tính này tồn tại. Và cấu trúc cũng tùy vào dữ liệu trả về.
+		}
+	+ Mọi domain khác đểu có thể sử dụng mà không sợ CORS
+	+ Khi nói đến user đang đăng nhập hiện tại có nghĩa là user đã authen có session gắn với jawnSUID token được gửi lên cho server thông qua cookie mỗi lần request.
+
+1/
+	URL: /api/profile/modify
+	Nhiệm vụ: Thay đổi thông tin cá nhân của user đang đăng nhập hiện tại.
+	Phương thức: POST
+	Tham số request:
+		_ Tùy chọn:
+			+ eml: email
+			+ pwd: mật khẩu
+			+ gdr: giới tính
+			+ nam: họ và tên
+	Cấu trúc response:
+		{
+			meta:{} //Tương tự như trên
+		}
+		
+2/
+	URL: /api/profile/fetch
+	Nhiệm vụ: lấy về thông tin cá nhân của user đang đăng nhập hiện tại.
+	Phương thức: GET
+	Tham số request: không
+	Cấu trúc response:
+		{
+			meta:{}, //Tương tự như trên
+			data:
+			{
+				email:"", //Email
+				name:"", //Họ và tên
+				gender:"" //Giới tính
+			}
+		}
+
+3/
+	URL: /api/unsubscribe/<fuid>
+	Nhiệm vụ: Ngưng theo dõi một nguồn tin có id là <fuid>.
+	Phương thức: GET
+	Tham số request:
+		_ Bắt buộc:
+			<fuid>: id của nguồn tin
+	Cấu trúc response:
+		{
+			meta:{} //Tương tự như trên
+		}
+		
+4/
+	URL: /api/tag/toggle/star
+	Nhiệm vụ: Bật/tắt đánh dấu lưu trữ một tin tức. Nếu tin tức hiện đã và đang được đánh dấu lưu trữ thì sau khi request sẽ bị đưa ra khỏi lưu trữ và ngược lại.
+	Phương thức: GET
+	Tham số request:
+		_ Bắt buộc:
+			+ iid: id của tin tức
+	Cấu trúc response:
+		{
+			meta:{} //Tương tự như trên
+		}
+		
+5/
+	URL: /api/subscribe
+	Nhiệm vụ: Theo dõi url của một nguồn tin tức.
+	Phương thức: GET
+	Tham số request:
+		_ Bắt buộc:
+			+ url: url của một nguồn tin
+	Cấu trúc response:
+		{
+			meta:{} //Tương tự như trên
+			data:
+			{
+				title: "", //Tiêu đề nguồn tin
+				fuid: "" //id của nguồn tin
+			}
+		}
+		
+6/
+	URL: /api/tempfeed/remove/<url>
+	Nhiệm vụ: Xóa 1 nguồn tin tạm chưa được server xử lý xong
+	Phương thức: GET
+	Tham số request:
+		_ Bắt buộc:
+			+ <url>: url của một nguồn tin
+	Cấu trúc response:
+			{
+				meta:{} //Tương tự như trên
+			}
+7/
+	URL: /api/register
+	Nhiệm vụ: Đăng ký tài khoản người dùng
+	Phương thức: POST
+	Tham số request:
+		_ Bắt buộc:
+			+eml: email của người dùng
+			+pwd: mật khẩu của người dùng
+			+gdr: giới tính của người dùng
+			+nam: tên của người dùng
+	Cấu trúc response:
+		{
+			meta:{} //Tương tự như trên
+			data:
+			{
+				email: "", //email của người dùng
+				name: "", //tên của người dùng
+				gender: "" //giới tính của người dùng
+			}
+		}
+8/
+	URL: /api/feed/preview
+	Nhiệm vụ:
+	Phương thức: GET
+	Tham số request:
+		_ Bắt buộc:
+			+ url: Đường dẫn tin RSS
+	Cấu trúc response:
+		{
+			meta:
+			{
+				subscribed: true || false
+			} //Tương tự như trên
+			data:
+			{
+				feed: "", // Chứa thông tin (title, link, ... tùy theo trang)
+				items: "" //Chứa tất cả các item con
+			}
+		}
+
+9/
+	URL: /user/comment
+	Nhiệm vụ:
+	Phương thức: POST
+	Tham số request:
+		_ Tùy chọn:
+			+tex: Nội dung comment
+		_ Bắt buộc:
+			+iid: id cua item
+			
+	Cấu trúc response:
+		{
+			meta:{} //Tương tự như trên
+		}
+
+10/
+	URL: /api/list/item
+	Nhiệm vụ:
+	Phương thức: GET
+	Tham số request:
+		_ Tùy chọn:
+		_ Bắt buộc:
+	Cấu trúc response:
+		{
+			meta:{} //Tương tự như trên
+			data:
+			{
+				items: ""//Chứa tất cả các item con
+			}
+		}
+11/
+	URL: 
+	Nhiệm vụ: /api/item/list/lastest
+	Phương thức: GET
+	Tham số request:
+		_ Bắt buộc:
+			+Không có
+		
+	Cấu trúc response:
+		{
+			meta:{} //Tương tự như trên
+			data:
+			{
+				items: ""//Chứa tất cả các item con
+			}
+		}
+12/
+	URL: /api/item/list/tag/star
+	Nhiệm vụ:
+	Phương thức: GET
+	Tham số request:
+		_ Bắt buộc:
+			+Không có
+	Cấu trúc response:
+		{
+			meta:{} //Tương tự như trên
+			data:
+			{
+				tag: "", //
+				items: "" // Chứa tất cả các item con
+			}
+		}
+		
+13/
+	URL: /api/item/list/feed/<fuid>
+	Nhiệm vụ:
+	Phương thức: GET
+	Tham số request:
+		_ Bắt buộc:
+			+<fuid>: id duy nhất của từng feed.
+	Cấu trúc response:	
+		{
+			meta:{} //Tương tự như trên
+			data:
+			{
+				feed: "", // 
+				items: "" // Chứa tất cả các item con
+			}
+		}
+	
+14/ 
+	URL: api/item/details
+	Nhiệm vụ:
+	Phương thức: GET
+	Tham số request:
+		_ Bắt buộc:
+			+iuid: id duy nhất của item
+	Cấu trúc response:	
+		{
+			meta:{} //Tương tự như trên
+			data:
+			{
+				item: "", // Nội dung tin chi tiết
+				comment: "" // Nội dung comment của người dùng
+			}
+		}
+15/
+	URL: /api/invalid
+	Nhiệm vụ: Kiểm tra trạng thái đăng nhập của người dùng
+	Phương thức: GET
+	Tham số request:
+		_ Bắt buộc:
+			+Không có
+	Cấu trúc response:
+		{
+			meta:{} //Tương tự như trên
+		}
+	
+16/
+	URL: /api/import/opml
+	Nhiệm vụ:
+	Phương thức: GET
+	Tham số request:
+		_ Tùy chọn:
+		_ Bắt buộc:
+	Cấu trúc response:
+	
+17/
+	URL: api/feed/list/all
+	Nhiệm vụ: Liệt kê tất cả feed
+	Phương thức: GET
+	Tham số request:
+		_ Bắt buộc:
+			+Không có
+	Cấu trúc response:
+		{
+			meta:{} //Tương tự như trên
+			data:
+			{
+				feeds: ""// Chứa tất cả các feed của người dùng
+			}
+		}
+	
+18/*^*
+	URL: api/feed/details
+	Nhiệm vụ: Liệt kê nội dung chi tiết của feed
+	Phương thức: GET
+	Tham số request:
+		_ Tùy chọn:
+			+fuid:
+			+url:
+		_ Bắt buộc:
+	Cấu trúc response:
+	
+18/
+	URL: /api/export/xml/tag/star
+	Nhiệm vụ: 
+	Phương thức: GET
+	Tham số request:
+		_ Tùy chọn:
+		_ Bắt buộc:
+	Cấu trúc response:
+	
+19/
+	URL: /api/export/opml
+	Nhiệm vụ:
+	Phương thức: GET
+	Tham số request:
+		_ Tùy chọn:
+		_ Bắt buộc:
+	Cấu trúc response:
+	
+20/
+	URL: /api/check/subscribed
+	Nhiệm vụ:
+	Phương thức: GET
+	Tham số request:
+		_ Bắt buộc:
+			+url: Đường dẫn của tin RSS
+	Cấu trúc response:
+		{
+			meta:{} //Tương tự như trên
+			data:
+			{
+				+fuid: ""//
+			}
+		}
+21/
+	URL: /api/authen
+	Nhiệm vụ: Xác thực người dùng
+	Phương thức: POST
+	Tham số request:
+		_ Bắt buộc:
+	Cấu trúc response:
+		{
+			meta:{} //Tương tự như trên
+			
+		}
